@@ -47,4 +47,4 @@ function navNewStoryForm() {
   hidePageComponents();
   $submitForm.show();
 }
-$submitNav.on("click", console.log("submit"));
+$submitNav.on("click", navNewStoryForm);

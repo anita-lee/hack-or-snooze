@@ -1,5 +1,8 @@
 "use strict";
 
+const $nameNavLinks = $('.main-nav-links');
+console.log ($nameNavLinks);
+
 // global to hold the User instance of the currently-logged-in user
 let currentUser;
 
@@ -110,6 +113,7 @@ function saveUserCredentialsInLocalStorage() {
 function updateUIOnUserLogin() {
   console.debug("updateUIOnUserLogin");
 
+  $nameNavLinks.show();
   $allStoriesList.show();
 
   updateNavOnLogin();

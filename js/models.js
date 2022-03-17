@@ -71,17 +71,17 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory(user, data) {
+  async addStory(token, data) {
     let URL = BASE_URL + ADD_STORY_URL;
-    let token = user.loginToken;
     let body = {
       token,
       story: data,
     };
 
     let response = await axios.post(URL, body);
-  
+
   return response.story;
+  }
 }
 
 /******************************************************************************

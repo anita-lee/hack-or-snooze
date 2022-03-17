@@ -3,6 +3,11 @@
 // This is the global list of the stories, an instance of StoryList
 let storyList;
 
+const $storySubmitBtn = $("#submit-form");
+const $author = $("#author");
+const $title = $("#title");
+const $url = $("#url");
+
 /** Get and show stories when site first loads. */
 
 async function getAndShowStoriesOnStart() {
@@ -50,3 +55,21 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+
+async function getAndAddStory(evt) {
+  evt.preventDefault();
+  console.log(evt);
+  let author = $author.val();
+  let title = $title.val();
+  let url = $url.val();
+
+  let data = {author, title, url};
+  let token = localStorage.getItem("token");
+
+  console.log ("data=", data, "token= ", token)
+
+  await storyList.addStory(token, data);
+}
+
+$storySubmitBtn.submit(getAndAddStory);
