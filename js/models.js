@@ -78,9 +78,16 @@ class StoryList {
       story: data,
     };
 
-    let response = await axios.post(URL, body);
-
-  return response.story;
+    let response = await axios({
+      method: "post",
+      url: URL,
+      data: {
+        token: currentUser.loginToken,
+        story: data,
+      },
+    });
+    console.log("response", response);
+    return response.story;
   }
 }
 
