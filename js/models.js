@@ -109,7 +109,7 @@ class User {
     this.name = name;
     this.createdAt = createdAt;
 
-    // instantiate Story instances for the user's favorites and ownStories
+    // instantiate Story instances for the user's favorites and ownStories (using storyID)
     this.favorites = favorites.map((s) => new Story(s));
     this.ownStories = ownStories.map((s) => new Story(s));
 
@@ -203,13 +203,31 @@ class User {
   }
 
   static async addFavorite(storyId) {
-    await axios(
-    {
+    for (let story of storyList.stories) {
+      if (story.storyId === storyId) {
+        currentUser.favorites.push(story);
+      }
+    }
+    await axios({
       url: `${BASE_URL}/users/${currentUser.username}/favorites/${storyId}`,
       method: "POST",
-      data: { "token": currentUser.loginToken },
+      data: { token: currentUser.loginToken },
     });
+
+    console.log("this.favorites=", currentUser.favorites);
+  }
+  static async unFavorite(storyId) {
+    for (let i = 0; i < currentUser.favorites.length; i++) {
+      if (currentUser.favorites[i].storyId === storyId) {
+        currentUser.favorites.splice(i, 1);
+      }
+    }
+    await axios({
+      url: `${BASE_URL}/users/${currentUser.username}/favorites/${storyId}`,
+      method: "POST",
+      data: { token: currentUser.loginToken },
+    });
+
+    console.log("this.favorites=", currentUser.favorites);
   }
 }
-
-

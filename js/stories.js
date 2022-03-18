@@ -7,8 +7,8 @@ const $storySubmitForm = $("#submit-form");
 const $author = $("#author");
 const $title = $("#title");
 const $url = $("#url");
-const $favStar = $(".fa-star")
-const $storiesList = $(".stories-list")
+const $favStar = $(".fa-star");
+const $storiesList = $(".stories-list");
 
 /** Get and show stories when site first loads. */
 
@@ -28,11 +28,22 @@ async function getAndShowStoriesOnStart() {
 
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
+  console.log("story=", story);
+  console.log("favs=", currentUser.favorites);
+  let isFav = "";
+  // loop through currentUser.favorites if story.storyId === currentUser.favorites
+  for (let i = 0; i < currentUser.favorites.length; i++) {
+    if (currentUser.favorites[i].storyId === story.storyId) {
+      isFav = "fas";
+    } else {
+      isFav = "far";
+    }
+  }
 
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
-        <span class="star"> <i class="far fa-star"></i> </span>
+        <span class="star"> <i class="${isFav} fa-star"></i> </span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -43,30 +54,29 @@ function generateStoryMarkup(story) {
     `);
 }
 
-
 //get data and pass it to currentUser.favorites
 //update markup
 
 function favStarMarkup(evt) {
   const $target = $(evt.target);
   const closestLi = $target.closest("li");
-  const storyId = closestLi.attr("id")
+  const storyId = closestLi.attr("id");
 
   console.log("target =", $target);
 
-  if ($target.hasClass("far fa-star")) {
-    $target.closest("i").toggleClass("fa-star fas");
+  if ($target.hasClass("far")) {
+    User.addFavorite(storyId);
+    $target.closest("i").toggleClass("fas far");
+  } else {
+    User.unFavorite(storyId);
+    $target.closest("i").toggleClass("fas far");
   }
 
-  User.addFavorite(storyId);
-
-
-  console.log ("storyID=", storyId)
+  console.log("storyID=", storyId);
   console.log(closestLi);
 }
 
 $storiesList.on("click", ".star", favStarMarkup);
-
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
