@@ -9,6 +9,7 @@ const $title = $("#title");
 const $url = $("#url");
 const $favStar = $(".fa-star");
 const $storiesList = $(".stories-list");
+const $favoritesPage = $("#favorited-stories");
 
 /** Get and show stories when site first loads. */
 
@@ -52,8 +53,11 @@ function generateStoryMarkup(story) {
     `);
 }
 
-//get data and pass it to currentUser.favorites
-//update markup
+/** Toggles class for favorite "star" and calls addFavorite and unFavorite functions to update the API
+ *
+ * @param {obj} evt
+ * @return void
+ */
 
 async function favStarMarkup(evt) {
   const $target = $(evt.target);
@@ -74,7 +78,7 @@ async function favStarMarkup(evt) {
   console.log(closestLi);
 }
 
-$storiesList.on("click", ".star", favStarMarkup);
+$storiesList.on("click", ".star", favStarMarkup); //favorite "star" event listener
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
@@ -116,4 +120,45 @@ async function getAndAddStory(evt) {
   getAndShowStoriesOnStart();
 }
 
-$storySubmitForm.submit(getAndAddStory);
+$storySubmitForm.submit(getAndAddStory); //submit form button event listener
+
+/**
+ * A render method to render HTML for an individual Story instance
+ * - story: an instance of Story
+ *
+ * Returns the markup for each favorited story.
+ */
+
+function generateFavoritesMarkup(story) {
+  return $(`
+    <li id="${story.storyId}">
+      <span class="star"> <i class="fas fa-star"></i> </span>
+      <a href="${story.url}" target="a_blank" class="story-link">
+        ${story.title}
+      </a>
+      <small class="story-author">by ${story.author}</small>
+      <small class="story-user">posted by ${story.username}</small>
+    </li>
+  `);
+}
+
+/** Gets list of favorited stories from server, generates their HTML, and puts on page. */
+
+function putFavoritesOnPage(){
+  $favoritesPage.empty();
+
+  for (let story of currentUser.favorites) {
+    const favorites = generateFavoritesMarkup(story);
+    $favoritesPage.append(favorites);
+  }
+}
+
+// function putMyStoriesOnPage(stories){
+//   $myStoriesList.empty();
+
+//   for (let story of stories) {
+//     const favorites = generateFavoritesMarkup(story);
+//     $favoritesPage.append(favorites);
+//   }
+// }
+

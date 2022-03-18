@@ -2,6 +2,7 @@
 
 const BASE_URL = "https://hack-or-snooze-v3.herokuapp.com";
 const ADD_STORY_URL = "/stories";
+
 /******************************************************************************
  * Story: a single story in the system
  */
@@ -202,24 +203,51 @@ class User {
     }
   }
 
+/** Post favorited story to API and add new Story instance to User instance favorites property.
+
+   * @params storyId of Favorited Story
+   * @return void
+   */
+
   static async addFavorite(storyId) {
     let response = await axios({
       url: `${BASE_URL}/users/${currentUser.username}/favorites/${storyId}`,
       method: "POST",
       data: { token: currentUser.loginToken },
     });
-    currentUser.favorites = [];
-    currentUser.favorites.push(response.data.user.favorites);
+     currentUser.favorites = response.data.user.favorites.map(function(favorite) {
+      return new Story(favorite);
+    } )
     console.log("response==", response.data.user.favorites);
   }
+
+  /** Delete unfavorited story to API and delete Story instance from User instance favorites property.
+
+   * @params storyId of unfavorited story
+   * @return void
+   */
+
   static async unFavorite(storyId) {
     let response = await axios({
       url: `${BASE_URL}/users/${currentUser.username}/favorites/${storyId}`,
       method: "DELETE",
       data: { token: currentUser.loginToken },
     });
-    currentUser.favorites = [];
-    currentUser.favorites.push(response.data.user.favorites);
+    currentUser.favorites = currentUser.favorites.filter(function(favorite) {
+      return favorite.storyId !== storyId;
+    } )
     console.log("unFavResponse", response);
   }
+  // static async addUserStories() {
+  //   let response = await axios({
+  //     url: `${BASE_URL}/users/${currentUser.username}`,
+  //     method: "GET",
+  //     data: { token: currentUser.loginToken },
+  //     headers: {
+  //       "Content-type": "application/json; charset=UTF-8"}
+  //     });
+  //   console.log("currentusername=", currentUser.username);
+  //   console.log("response=", response.data.user.stories);
+  //   return response.data.user.stories;
+  // }
 }
