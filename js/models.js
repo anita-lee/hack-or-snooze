@@ -203,31 +203,23 @@ class User {
   }
 
   static async addFavorite(storyId) {
-    for (let story of storyList.stories) {
-      if (story.storyId === storyId) {
-        currentUser.favorites.push(story);
-      }
-    }
-    await axios({
+    let response = await axios({
       url: `${BASE_URL}/users/${currentUser.username}/favorites/${storyId}`,
       method: "POST",
       data: { token: currentUser.loginToken },
     });
-
-    console.log("this.favorites=", currentUser.favorites);
+    currentUser.favorites = [];
+    currentUser.favorites.push(response.data.user.favorites);
+    console.log("response==", response.data.user.favorites);
   }
   static async unFavorite(storyId) {
-    for (let i = 0; i < currentUser.favorites.length; i++) {
-      if (currentUser.favorites[i].storyId === storyId) {
-        currentUser.favorites.splice(i, 1);
-      }
-    }
-    await axios({
+    let response = await axios({
       url: `${BASE_URL}/users/${currentUser.username}/favorites/${storyId}`,
-      method: "POST",
+      method: "DELETE",
       data: { token: currentUser.loginToken },
     });
-
-    console.log("this.favorites=", currentUser.favorites);
+    currentUser.favorites = [];
+    currentUser.favorites.push(response.data.user.favorites);
+    console.log("unFavResponse", response);
   }
 }

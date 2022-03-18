@@ -30,14 +30,12 @@ function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
   console.log("story=", story);
   console.log("favs=", currentUser.favorites);
-  let isFav = "";
+  let isFav = "far";
+
+  // given a story currentUser.favorites.map(fav => fav.storyId).includes(story.storyId)
   // loop through currentUser.favorites if story.storyId === currentUser.favorites
-  for (let i = 0; i < currentUser.favorites.length; i++) {
-    if (currentUser.favorites[i].storyId === story.storyId) {
-      isFav = "fas";
-    } else {
-      isFav = "far";
-    }
+  if (currentUser.favorites.map((fav) => fav.storyId).includes(story.storyId)) {
+    isFav = "fas";
   }
 
   const hostName = story.getHostName();
@@ -57,7 +55,7 @@ function generateStoryMarkup(story) {
 //get data and pass it to currentUser.favorites
 //update markup
 
-function favStarMarkup(evt) {
+async function favStarMarkup(evt) {
   const $target = $(evt.target);
   const closestLi = $target.closest("li");
   const storyId = closestLi.attr("id");
@@ -65,10 +63,10 @@ function favStarMarkup(evt) {
   console.log("target =", $target);
 
   if ($target.hasClass("far")) {
-    User.addFavorite(storyId);
+    await User.addFavorite(storyId);
     $target.closest("i").toggleClass("fas far");
   } else {
-    User.unFavorite(storyId);
+    await User.unFavorite(storyId);
     $target.closest("i").toggleClass("fas far");
   }
 
