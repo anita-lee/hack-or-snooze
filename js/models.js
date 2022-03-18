@@ -87,7 +87,7 @@ class StoryList {
       },
     });
     console.log("response", response);
-    return response.story;
+    return response.data.story;
   }
 }
 
@@ -201,4 +201,15 @@ class User {
       return null;
     }
   }
+
+  static async addFavorite(storyId) {
+    await axios(
+    {
+      url: `${BASE_URL}/users/${currentUser.username}/favorites/${storyId}`,
+      method: "POST",
+      data: { "token": currentUser.loginToken },
+    });
+  }
 }
+
+
