@@ -153,12 +153,12 @@ function putFavoritesOnPage(){
   }
 }
 
-// function putMyStoriesOnPage(stories){
-//   $myStoriesList.empty();
+function putMyStoriesOnPage(){
+  $myStoriesList.empty();
 
-//   for (let story of stories) {
-//     const favorites = generateFavoritesMarkup(story);
-//     $favoritesPage.append(favorites);
-//   }
-// }
+  for (let story of currentUser.ownStories) {
+    const myStory = generateFavoritesMarkup(story);
+    $myStoriesList.append(myStory);
+  }
+}
 

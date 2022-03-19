@@ -69,12 +69,12 @@ function navOpenFavorites() {
 
 $favoriteLink.on("click", navOpenFavorites) //"favorites" navigation link event listener
 
-// async function navOpenMyStories() {
-//   hidePageComponents();
-//   let stories = await User.addUserStories();
-//   putMyStoriesOnPage(stories);
-
-//   $myStoriesList.show();
-// }
-// $navMyStoriesLink.on("click", navOpenMyStories)
+function navOpenMyStories() {
+  hidePageComponents();
+  // let stories = await User.addUserStories();
+  putMyStoriesOnPage();
+  console.log("putMyStories called");
+  $myStoriesList.show();
+}
+$navMyStoriesLink.on("click", navOpenMyStories)
 

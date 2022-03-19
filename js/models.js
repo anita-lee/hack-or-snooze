@@ -238,16 +238,16 @@ class User {
     } )
     console.log("unFavResponse", response);
   }
-  // static async addUserStories() {
-  //   let response = await axios({
-  //     url: `${BASE_URL}/users/${currentUser.username}`,
-  //     method: "GET",
-  //     data: { token: currentUser.loginToken },
-  //     headers: {
-  //       "Content-type": "application/json; charset=UTF-8"}
-  //     });
-  //   console.log("currentusername=", currentUser.username);
-  //   console.log("response=", response.data.user.stories);
-  //   return response.data.user.stories;
-  // }
+  static async addUserStories() {
+    let response = await axios({
+      url: `${BASE_URL}/users/${currentUser.username}`,
+      method: "GET",
+      params: { token: currentUser.loginToken },
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"}
+      });
+    console.log("currentusername=", currentUser.username);
+    console.log("response=", response.data.user.stories);
+    return response.data.user.stories;
+  }
 }
